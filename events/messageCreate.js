@@ -7,33 +7,42 @@ module.exports = {
         // Ignorar si el mensaje fue enviado por otro bot
         if (message.author.bot) return;
 
-        // --- NUEVO SISTEMA: DETECTOR AFK ---
-        // Si el usuario que acaba de hablar está guardado en la memoria de AFK...
+        // --- SISTEMA AFK: QUITAR AFK SI EL JUGADOR VUELVE A HABLAR ---
         if (global.afkDB && global.afkDB[message.author.id]) {
             const datosAfk = global.afkDB[message.author.id];
-            const target = message.member;
 
-            // 1. Intentamos devolverle su nombre original quitando el [AFK]
             try {
-                await target.setNickname(datosAfk.nombreOriginal);
+                await message.member.setNickname(datosAfk.nombreOriginal);
             } catch (error) {
-                // Ignorar si es el dueño o rol mayor
+                // Ignoramos el error si el usuario tiene un rol más alto que el bot.
             }
 
-            // 2. Lo borramos de la lista de AFK
             delete global.afkDB[message.author.id];
 
-            // 3. Avisamos que volvió
             const embedRegreso = new EmbedBuilder()
                 .setColor('#00b0f4')
                 .setDescription(`👋 **${message.author.username}** ha vuelto y se le ha quitado el AFK.`);
-            message.channel.send({ embeds: [embedRegreso] });
+            await message.channel.send({ embeds: [embedRegreso] });
         }
-        // ------------------------------------
+        // -------------------------------------------------------------
+
+        // --- SISTEMA AFK: AVISAR SI MENCIONAN A ALGUIEN AFK ---
+        if (global.afkDB && message.mentions.members.size > 0) {
+            const usuariosAfkMencionados = message.mentions.members.filter(member => global.afkDB[member.id]);
+
+            for (const member of usuariosAfkMencionados.values()) {
+                const datosAfk = global.afkDB[member.id];
+                const embedAfk = new EmbedBuilder()
+                    .setColor('#00b0f4')
+                    .setDescription(`💤 **${member.user.username}** está AFK.\n**Razón:** ${datosAfk.razon}`);
+                await message.channel.send({ embeds: [embedAfk] });
+            }
+        }
+        // --------------------------------------------------------
 
         // Definimos nuestro prefijo
         const prefix = 'dex ';
-        
+
         // Si el mensaje no empieza con "dex ", lo ignora
         if (!message.content.toLowerCase().startsWith(prefix)) return;
 
@@ -48,7 +57,7 @@ module.exports = {
 
         // Ejecutar comando
         try {
-            command.execute(message, args, client);
+            await command.execute(message, args, client);
         } catch (error) {
             console.error('Error al ejecutar el comando:', error);
             message.reply('Hubo un error al intentar ejecutar ese comando.');
