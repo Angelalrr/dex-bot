@@ -4,36 +4,39 @@ module.exports = {
     name: Events.MessageCreate,
     once: false,
     execute(message, client) {
-        // Si el mensaje fue enviado por otro bot, lo ignoramos para evitar bucles
+        // --- CHISMOSO 1: Ver si lee el mensaje ---
+        console.log(`He leído un mensaje de ${message.author.username} que dice: "${message.content}"`);
+
+        // Ignorar si es otro bot
         if (message.author.bot) return;
 
-        // Nuestro disparador principal
         const prefix = 'dex ';
-
-        // Convertimos el mensaje a minúsculas y revisamos si empieza con "dex "
-        // Si alguien escribe "Hola", esto lo ignora y detiene el código (return)
+        
+        // Si no empieza con "dex ", lo ignora silenciosamente
         if (!message.content.toLowerCase().startsWith(prefix)) return;
 
-        // Separamos el mensaje. 
-        // Ejemplo: "dex kick @usuario spam"
-        // .slice(prefix.length) quita el "dex " -> "kick @usuario spam"
-        // .split(/ +/) lo divide por espacios -> ["kick", "@usuario", "spam"]
+        // Separar el comando y los argumentos
         const args = message.content.slice(prefix.length).trim().split(/ +/);
-        
-        // .shift() saca la primera palabra del array ("kick") y la pasa a minúsculas
         const commandName = args.shift().toLowerCase();
 
-        // Buscamos si existe un comando con ese nombre en nuestra colección
+        // --- CHISMOSO 2: Ver qué intenta buscar ---
+        console.log(`🔍 Intentando buscar el comando: "${commandName}"`);
+
+        // Buscar en la mochila de comandos
         const command = client.commands.get(commandName);
 
-        // Si el comando no existe, no hacemos nada
-        if (!command) return;
+        // Si no existe, nos avisa en la consola y se detiene
+        if (!command) {
+            console.log(`❌ No se encontró ningún comando en la mochila llamado "${commandName}"`);
+            return;
+        }
 
+        // Si existe, intentar ejecutarlo
         try {
-            // Si existe, lo ejecutamos pasándole el mensaje y los argumentos extra
             command.execute(message, args, client);
+            console.log(`🚀 Comando "${commandName}" ejecutado con éxito por ${message.author.username}`);
         } catch (error) {
-            console.error('Error al ejecutar el comando:', error);
+            console.error(`💥 Error al ejecutar el comando ${commandName}:`, error);
             message.reply('Hubo un error al intentar ejecutar ese comando.');
         }
     },
