@@ -1,15 +1,31 @@
 const { EmbedBuilder } = require('discord.js');
+
 module.exports = {
     name: 'untimeout',
     async execute(message) {
         const target = message.mentions.members.first();
+        
+        // Si el usuario olvida mencionar a alguien
         if (!target) {
             return message.reply({ embeds: [new EmbedBuilder().setColor('Red').setDescription('⚠️ **Este comando está incompleto.**\n\n**Estructura:**\n`dex untimeout @usuario`')] });
         }
-        if (!message.member.permissions.has('ModerateMembers')) return message.reply({ embeds: [new EmbedBuilder().setColor('Red').setDescription('❌ No tienes permisos.')] });
+        
+        // Verificamos permisos
+        if (!message.member.permissions.has('ModerateMembers')) {
+            return message.reply({ embeds: [new EmbedBuilder().setColor('Red').setDescription('❌ No tienes permisos para usar este comando.')] });
+        }
 
-        await target.timeout(null);
-        const embed = new EmbedBuilder().setColor('#00b0f4').setDescription(`🔊 Se ha quitado el timeout a **${target.user.username}**.`);
-        message.reply({ embeds: [embed] });
+        try {
+            // Al igual que unmute, quitamos el timeout poniéndolo en "null"
+            await target.timeout(null);
+            
+            const embed = new EmbedBuilder()
+                .setColor('#00b0f4')
+                .setDescription(`🔊 Se ha quitado el timeout a **${target.user.username}**.`);
+            message.reply({ embeds: [embed] });
+            
+        } catch (error) {
+            message.reply({ embeds: [new EmbedBuilder().setColor('Red').setDescription('❌ No pude quitarle el timeout a este usuario. Es posible que tenga un rol superior al mío.')] });
+        }
     }
 };
