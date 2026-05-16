@@ -1,16 +1,40 @@
-const { Events } = require('discord.js');
+const { Events, EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: Events.MessageCreate,
     once: false,
-    execute(message, client) {
+    async execute(message, client) {
         // Ignorar si el mensaje fue enviado por otro bot
         if (message.author.bot) return;
 
-        // Definimos nuestro "prefijo" (la palabra disparadora)
+        // --- NUEVO SISTEMA: DETECTOR AFK ---
+        // Si el usuario que acaba de hablar está guardado en la memoria de AFK...
+        if (global.afkDB && global.afkDB[message.author.id]) {
+            const datosAfk = global.afkDB[message.author.id];
+            const target = message.member;
+
+            // 1. Intentamos devolverle su nombre original quitando el [AFK]
+            try {
+                await target.setNickname(datosAfk.nombreOriginal);
+            } catch (error) {
+                // Ignorar si es el dueño o rol mayor
+            }
+
+            // 2. Lo borramos de la lista de AFK
+            delete global.afkDB[message.author.id];
+
+            // 3. Avisamos que volvió
+            const embedRegreso = new EmbedBuilder()
+                .setColor('#00b0f4')
+                .setDescription(`👋 **${message.author.username}** ha vuelto y se le ha quitado el AFK.`);
+            message.channel.send({ embeds: [embedRegreso] });
+        }
+        // ------------------------------------
+
+        // Definimos nuestro prefijo
         const prefix = 'dex ';
         
-        // Si el mensaje no empieza con "dex ", lo ignora silenciosamente
+        // Si el mensaje no empieza con "dex ", lo ignora
         if (!message.content.toLowerCase().startsWith(prefix)) return;
 
         // Separar el nombre del comando y los argumentos
@@ -20,15 +44,12 @@ module.exports = {
         // Buscar el comando en nuestra mochila
         const command = client.commands.get(commandName);
 
-        // Si el comando no existe, nos detenemos aquí
         if (!command) return;
 
-        // Si el comando existe, lo ejecutamos
+        // Ejecutar comando
         try {
             command.execute(message, args, client);
         } catch (error) {
-            // Este console.error sí lo dejamos porque es una buena práctica 
-            // registrar errores reales que puedan tumbar al bot
             console.error('Error al ejecutar el comando:', error);
             message.reply('Hubo un error al intentar ejecutar ese comando.');
         }
