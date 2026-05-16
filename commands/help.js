@@ -63,6 +63,10 @@ module.exports = {
 ↳ *Estructura:* \`dex poll pregunta\`
 🔸 **dex remind** | Crea un recordatorio.
 ↳ *Estructura:* \`dex remind tiempo mensaje\`
+🔸 **dex afk** | Marca tu estado como AFK. *(Razón opcional)*
+↳ *Estructura:* \`dex afk razón\`
+🔸 **dex unafk** | Quita manualmente el AFK de un usuario. *(Solo owner)*
+↳ *Estructura:* \`dex unafk @usuario\`
 
 🎫 **Tickets y Roles**
 🔸 **dex ticket** | Crea un ticket de soporte.
