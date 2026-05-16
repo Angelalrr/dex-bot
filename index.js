@@ -25,6 +25,9 @@ client.commands = new Collection();
 // Creamos la memoria temporal para el comando de advertencias (warns)
 global.warningsDB = {};
 
+// Creamos la memoria temporal para los AFK
+global.afkDB = {};
+
 // --- CARGADOR DE COMANDOS ---
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
