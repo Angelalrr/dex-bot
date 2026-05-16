@@ -1,7 +1,12 @@
 const { EmbedBuilder } = require('discord.js');
+const { hasModRoleOrHigher } = require('../utils/modPermissions');
 module.exports = {
     name: 'warnings',
     execute(message) {
+        if (!hasModRoleOrHigher(message.member)) {
+            return message.reply({ embeds: [new EmbedBuilder().setColor('Red').setDescription('❌ Necesitas rol mod o superior para usar este comando.')] });
+        }
+
         const target = message.mentions.users.first();
         if (!target) {
             return message.reply({ embeds: [new EmbedBuilder().setColor('Red').setDescription('⚠️ **Este comando está incompleto.**\n\n**Estructura:**\n`dex warnings @usuario`')] });
