@@ -7,6 +7,25 @@ module.exports = {
         // Ignorar si el mensaje fue enviado por otro bot
         if (message.author.bot) return;
 
+        // --- SISTEMA AFK: QUITAR AFK SI EL JUGADOR VUELVE A HABLAR ---
+        if (global.afkDB && global.afkDB[message.author.id]) {
+            const datosAfk = global.afkDB[message.author.id];
+
+            try {
+                await message.member.setNickname(datosAfk.nombreOriginal);
+            } catch (error) {
+                // Ignoramos el error si el usuario tiene un rol más alto que el bot.
+            }
+
+            delete global.afkDB[message.author.id];
+
+            const embedRegreso = new EmbedBuilder()
+                .setColor('#00b0f4')
+                .setDescription(`👋 **${message.author.username}** ha vuelto y se le ha quitado el AFK.`);
+            await message.channel.send({ embeds: [embedRegreso] });
+        }
+        // -------------------------------------------------------------
+
         // --- SISTEMA AFK: AVISAR SI MENCIONAN A ALGUIEN AFK ---
         if (global.afkDB && message.mentions.members.size > 0) {
             const usuariosAfkMencionados = message.mentions.members.filter(member => global.afkDB[member.id]);
