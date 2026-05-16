@@ -26,14 +26,10 @@ client.commands = new Collection();
 global.warningsDB = {};
 
 // --- CARGADOR DE COMANDOS ---
-console.log('--- INICIANDO CARGA DE COMANDOS ---');
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
     client.commands.set(command.name, command);
-    
-    // El chismoso para saber si se cargan bien
-    console.log(`✅ Comando cargado: ${command.name}`);
 }
 
 // --- CARGADOR DE EVENTOS ---
