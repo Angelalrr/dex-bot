@@ -3,6 +3,7 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const fs = require('fs');
 require('dotenv').config();
 const express = require('express');
+const { loadData } = require('./utils/storage');
 
 // --- SISTEMA ANTI-APAGADO (Servidor Web) ---
 const app = express();
@@ -22,11 +23,12 @@ const client = new Client({
 // Creamos la mochila de comandos
 client.commands = new Collection();
 
-// Creamos la memoria temporal para el comando de advertencias (warns)
-global.warningsDB = {};
-
-// Creamos la memoria temporal para los AFK
-global.afkDB = {};
+// Cargamos la memoria persistente del bot desde data/bot-data.json
+const persistedData = loadData();
+global.warningsDB = persistedData.warningsDB;
+global.afkDB = persistedData.afkDB;
+global.timeoutsDB = persistedData.timeoutsDB;
+global.bansDB = persistedData.bansDB;
 
 // --- CARGADOR DE COMANDOS ---
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
