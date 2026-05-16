@@ -30,7 +30,7 @@ module.exports = {
         try {
             // Convertimos los minutos que pidió el usuario a milisegundos (1 min = 60,000 ms)
             await target.timeout(tiempo * 60 * 1000, razon);
-            recordTimeout(target.id, {
+            await recordTimeout(target.id, {
                 username: target.user.username,
                 moderatorId: message.author.id,
                 razon,

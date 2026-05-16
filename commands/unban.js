@@ -18,7 +18,7 @@ module.exports = {
 
         try {
             const unbannedUser = await message.guild.members.unban(userId, razon);
-            removeBan(userId);
+            await removeBan(userId);
 
             const embed = new EmbedBuilder()
                 .setColor('#00b0f4')

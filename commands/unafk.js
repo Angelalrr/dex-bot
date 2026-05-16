@@ -5,10 +5,6 @@ function isOwner(message) {
     return Boolean(process.env.OWNER_ID && message.author.id === process.env.OWNER_ID);
 }
 
-function isOwner(message) {
-    return Boolean(process.env.OWNER_ID && message.author.id === process.env.OWNER_ID);
-}
-
 module.exports = {
     name: 'unafk',
     async execute(message) {
@@ -35,7 +31,7 @@ module.exports = {
         }
 
         delete global.afkDB[target.id];
-        saveAfkDB();
+        await saveAfkDB();
 
         const embed = new EmbedBuilder()
             .setColor('#00b0f4')

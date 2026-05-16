@@ -19,7 +19,7 @@ module.exports = {
             }
 
             delete global.afkDB[message.author.id];
-            saveAfkDB();
+            await saveAfkDB();
 
             const embedRegreso = new EmbedBuilder()
                 .setColor('#00b0f4')

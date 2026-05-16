@@ -23,7 +23,7 @@ module.exports = {
         try {
             // Aplicamos el silencio nativo sin usar ningún rol
             await target.timeout(tiempoMaximo, razon);
-            recordTimeout(target.id, {
+            await recordTimeout(target.id, {
                 username: target.user.username,
                 moderatorId: message.author.id,
                 razon,

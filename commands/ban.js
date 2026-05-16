@@ -12,7 +12,7 @@ module.exports = {
 
         const razon = args.slice(1).join(' ') || 'Ninguna especificada';
         await target.ban({ reason: razon });
-        recordBan(target.id, {
+        await recordBan(target.id, {
             username: target.user.username,
             moderatorId: message.author.id,
             razon,

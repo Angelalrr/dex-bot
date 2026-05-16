@@ -20,7 +20,7 @@ module.exports = {
         try {
             // Pasamos "null" al timeout para remover cualquier silencio/aislamiento que tenga el usuario
             await target.timeout(null);
-            removeTimeout(target.id);
+            await removeTimeout(target.id);
 
             const embed = new EmbedBuilder()
                 .setColor('#00b0f4')

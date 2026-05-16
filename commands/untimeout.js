@@ -20,7 +20,7 @@ module.exports = {
         try {
             // Al igual que unmute, quitamos el timeout poniéndolo en "null"
             await target.timeout(null);
-            removeTimeout(target.id);
+            await removeTimeout(target.id);
 
             const embed = new EmbedBuilder()
                 .setColor('#00b0f4')

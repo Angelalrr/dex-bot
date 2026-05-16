@@ -16,7 +16,7 @@ module.exports = {
             razon,
             nombreOriginal
         };
-        saveAfkDB();
+        await saveAfkDB();
 
         try {
             await target.setNickname(`[AFK] ${nombreOriginal}`);
