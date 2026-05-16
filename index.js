@@ -3,6 +3,7 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const fs = require('fs');
 require('dotenv').config();
 const express = require('express');
+const { loadData } = require('./utils/storage');
 
 // --- SISTEMA ANTI-APAGADO (Servidor Web) ---
 const app = express();
@@ -19,32 +20,39 @@ const client = new Client({
     ]
 });
 
-// Creamos la mochila de comandos
-client.commands = new Collection();
+async function startBot() {
+    // Creamos la mochila de comandos
+    client.commands = new Collection();
 
-// Creamos la memoria temporal para el comando de advertencias (warns)
-global.warningsDB = {};
+    // Cargamos la memoria persistente gratuita desde Supabase si está configurado
+    const persistedData = await loadData();
+    global.warningsDB = persistedData.warningsDB;
+    global.afkDB = persistedData.afkDB;
+    global.timeoutsDB = persistedData.timeoutsDB;
+    global.bansDB = persistedData.bansDB;
 
-// Creamos la memoria temporal para los AFK
-global.afkDB = {};
-
-// --- CARGADOR DE COMANDOS ---
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
-    client.commands.set(command.name, command);
-}
-
-// --- CARGADOR DE EVENTOS ---
-const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
-for (const file of eventFiles) {
-    const event = require(`./events/${file}`);
-    if (event.once) {
-        client.once(event.name, (...args) => event.execute(...args, client));
-    } else {
-        client.on(event.name, (...args) => event.execute(...args, client));
+    // --- CARGADOR DE COMANDOS ---
+    const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+    for (const file of commandFiles) {
+        const command = require(`./commands/${file}`);
+        client.commands.set(command.name, command);
     }
+
+    // --- CARGADOR DE EVENTOS ---
+    const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
+    for (const file of eventFiles) {
+        const event = require(`./events/${file}`);
+        if (event.once) {
+            client.once(event.name, (...args) => event.execute(...args, client));
+        } else {
+            client.on(event.name, (...args) => event.execute(...args, client));
+        }
+    }
+
+    // Encendemos el bot
+    await client.login(process.env.TOKEN);
 }
 
-// Encendemos el bot
-client.login(process.env.TOKEN);
+startBot().catch(error => {
+    console.error('No se pudo iniciar Dex:', error);
+});

@@ -29,22 +29,22 @@ module.exports = {
 ↳ *Estructura:* \`dex banner @usuario\`
 
 🛡️ **Moderación**
-🔸 **dex clear** | Elimina cierta cantidad de mensajes.
-↳ *Estructura:* \`dex clear cantidad\`
+🔸 **dex clear** | Limpia un porcentaje de los mensajes recientes.
+↳ *Estructura:* \`dex clear número\` *(1-100 como porcentaje)*
 🔸 **dex kick** | Expulsa a un usuario. *(Razón opcional)*
 ↳ *Estructura:* \`dex kick @usuario razón\`
 🔸 **dex ban** | Banea a un usuario. *(Razón opcional)*
 ↳ *Estructura:* \`dex ban @usuario razón\`
+🔸 **dex unban** | Desbanea a un usuario por ID. *(Razón opcional)*
+↳ *Estructura:* \`dex unban ID_usuario razón\`
 🔸 **dex timeout** | Silencia temporalmente. *(Razón opcional)*
 ↳ *Estructura:* \`dex timeout @usuario tiempo razón\`
 🔸 **dex untimeout** | Quita el timeout de un usuario.
 ↳ *Estructura:* \`dex untimeout @usuario\`
-🔸 **dex mute** | Silencia a un usuario por rol. *(Razón opcional)*
-↳ *Estructura:* \`dex mute @usuario razón\`
-🔸 **dex unmute** | Quita el silencio por rol de un usuario.
-↳ *Estructura:* \`dex unmute @usuario\`
-🔸 **dex warn** | Añade una advertencia. *(Razón opcional)*
+🔸 **dex warn** | Añade una advertencia. Con 3 warns da timeout de 28 días. *(Razón opcional)*
 ↳ *Estructura:* \`dex warn @usuario razón\`
+🔸 **dex unwarn** | Quita advertencias de un usuario.
+↳ *Estructura:* \`dex unwarn @usuario 1/2/3/all\`
 🔸 **dex warnings** | Muestra advertencias de un usuario.
 ↳ *Estructura:* \`dex warnings @usuario\`
 🔸 **dex lock** | Bloquea un canal.
@@ -63,6 +63,10 @@ module.exports = {
 ↳ *Estructura:* \`dex poll pregunta\`
 🔸 **dex remind** | Crea un recordatorio.
 ↳ *Estructura:* \`dex remind tiempo mensaje\`
+🔸 **dex afk** | Marca tu estado como AFK. *(Razón opcional)*
+↳ *Estructura:* \`dex afk razón\`
+🔸 **dex unafk** | Quita manualmente el AFK de un usuario. *(Solo owner)*
+↳ *Estructura:* \`dex unafk @usuario\`
 
 🎫 **Tickets y Roles**
 🔸 **dex ticket** | Crea un ticket de soporte.
