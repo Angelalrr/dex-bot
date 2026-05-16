@@ -5,6 +5,10 @@ function isOwner(message) {
     return Boolean(process.env.OWNER_ID && message.author.id === process.env.OWNER_ID);
 }
 
+function isOwner(message) {
+    return Boolean(process.env.OWNER_ID && message.author.id === process.env.OWNER_ID);
+}
+
 module.exports = {
     name: 'unafk',
     async execute(message) {
