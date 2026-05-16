@@ -4,39 +4,32 @@ module.exports = {
     name: Events.MessageCreate,
     once: false,
     execute(message, client) {
-        // --- CHISMOSO 1: Ver si lee el mensaje ---
-        console.log(`He leído un mensaje de ${message.author.username} que dice: "${message.content}"`);
-
-        // Ignorar si es otro bot
+        // Ignorar si el mensaje fue enviado por otro bot
         if (message.author.bot) return;
 
+        // Definimos nuestro "prefijo" (la palabra disparadora)
         const prefix = 'dex ';
         
-        // Si no empieza con "dex ", lo ignora silenciosamente
+        // Si el mensaje no empieza con "dex ", lo ignora silenciosamente
         if (!message.content.toLowerCase().startsWith(prefix)) return;
 
-        // Separar el comando y los argumentos
+        // Separar el nombre del comando y los argumentos
         const args = message.content.slice(prefix.length).trim().split(/ +/);
         const commandName = args.shift().toLowerCase();
 
-        // --- CHISMOSO 2: Ver qué intenta buscar ---
-        console.log(`🔍 Intentando buscar el comando: "${commandName}"`);
-
-        // Buscar en la mochila de comandos
+        // Buscar el comando en nuestra mochila
         const command = client.commands.get(commandName);
 
-        // Si no existe, nos avisa en la consola y se detiene
-        if (!command) {
-            console.log(`❌ No se encontró ningún comando en la mochila llamado "${commandName}"`);
-            return;
-        }
+        // Si el comando no existe, nos detenemos aquí
+        if (!command) return;
 
-        // Si existe, intentar ejecutarlo
+        // Si el comando existe, lo ejecutamos
         try {
             command.execute(message, args, client);
-            console.log(`🚀 Comando "${commandName}" ejecutado con éxito por ${message.author.username}`);
         } catch (error) {
-            console.error(`💥 Error al ejecutar el comando ${commandName}:`, error);
+            // Este console.error sí lo dejamos porque es una buena práctica 
+            // registrar errores reales que puedan tumbar al bot
+            console.error('Error al ejecutar el comando:', error);
             message.reply('Hubo un error al intentar ejecutar ese comando.');
         }
     },
