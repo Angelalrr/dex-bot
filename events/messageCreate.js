@@ -1,4 +1,5 @@
 const { Events, EmbedBuilder } = require('discord.js');
+const { saveAfkDB } = require('../utils/storage');
 
 module.exports = {
     name: Events.MessageCreate,
@@ -18,6 +19,7 @@ module.exports = {
             }
 
             delete global.afkDB[message.author.id];
+            saveAfkDB();
 
             const embedRegreso = new EmbedBuilder()
                 .setColor('#00b0f4')

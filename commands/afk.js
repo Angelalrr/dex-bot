@@ -1,4 +1,5 @@
 const { EmbedBuilder } = require('discord.js');
+const { saveAfkDB } = require('../utils/storage');
 
 module.exports = {
     name: 'afk',
@@ -15,6 +16,7 @@ module.exports = {
             razon,
             nombreOriginal
         };
+        saveAfkDB();
 
         try {
             await target.setNickname(`[AFK] ${nombreOriginal}`);

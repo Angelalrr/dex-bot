@@ -1,4 +1,9 @@
 const { EmbedBuilder } = require('discord.js');
+const { saveAfkDB } = require('../utils/storage');
+
+function isOwner(message) {
+    return Boolean(process.env.OWNER_ID && message.author.id === process.env.OWNER_ID);
+}
 
 function isOwner(message) {
     return Boolean(process.env.OWNER_ID && message.author.id === process.env.OWNER_ID);
@@ -30,6 +35,7 @@ module.exports = {
         }
 
         delete global.afkDB[target.id];
+        saveAfkDB();
 
         const embed = new EmbedBuilder()
             .setColor('#00b0f4')
