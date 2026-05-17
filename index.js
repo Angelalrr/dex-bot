@@ -30,12 +30,18 @@ async function startBot() {
     global.afkDB = persistedData.afkDB;
     global.timeoutsDB = persistedData.timeoutsDB;
     global.bansDB = persistedData.bansDB;
+    global.moderationSettingsDB = persistedData.moderationSettingsDB;
 
     // --- CARGADOR DE COMANDOS ---
     const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
     for (const file of commandFiles) {
         const command = require(`./commands/${file}`);
         client.commands.set(command.name, command);
+        if (command.aliases) {
+            for (const alias of command.aliases) {
+                client.commands.set(alias, command);
+            }
+        }
     }
 
     // --- CARGADOR DE EVENTOS ---
