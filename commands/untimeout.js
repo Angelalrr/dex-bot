@@ -18,7 +18,7 @@ module.exports = {
         }
 
         try {
-            // Al igual que unmute, quitamos el timeout poniéndolo en "null"
+            // Quitamos el timeout poniéndolo en "null"
             await target.timeout(null);
             await removeTimeout(target.id);
 
