@@ -29,8 +29,8 @@ module.exports = {
 ↳ *Estructura:* \`dex banner @usuario\`
 
 🛡️ **Moderación**
-🔸 **dex clear** | Limpia un porcentaje de los mensajes recientes.
-↳ *Estructura:* \`dex clear número\` *(1-100 como porcentaje)*
+🔸 **dex purgue** | Limpia un porcentaje de los mensajes recientes.
+↳ *Estructura:* \`dex purgue número\` *(1-100 como porcentaje)*
 🔸 **dex kick** | Expulsa a un usuario. *(Razón opcional)*
 ↳ *Estructura:* \`dex kick @usuario razón\`
 🔸 **dex ban** | Banea a un usuario. *(Razón opcional)*
@@ -41,6 +41,14 @@ module.exports = {
 ↳ *Estructura:* \`dex timeout @usuario tiempo razón\`
 🔸 **dex untimeout** | Quita el timeout de un usuario.
 ↳ *Estructura:* \`dex untimeout @usuario\`
+🔸 **dex slowmode** | Activa el slowmode del canal. *(Alias: dex slow)*
+↳ *Estructura:* \`dex slowmode tiempo\`
+🔸 **dex unslowmode** | Quita el slowmode del canal. *(Alias: dex unslow)*
+↳ *Estructura:* \`dex unslowmode\`
+🔸 **dex antilink** | Bloquea o permite links.
+↳ *Estructura:* \`dex antilink on/off\`
+🔸 **dex antispam** | Activa o desactiva timeout por spam.
+↳ *Estructura:* \`dex antispam on/off tiempo\`
 🔸 **dex warn** | Añade una advertencia. *(Razón opcional)*
 ↳ *Estructura:* \`dex warn @usuario razón\`
 🔸 **dex unwarn** | Quita advertencias de un usuario.
