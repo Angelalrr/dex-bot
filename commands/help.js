@@ -41,12 +41,10 @@ module.exports = {
 ↳ *Estructura:* \`dex timeout @usuario tiempo razón\`
 🔸 **dex untimeout** | Quita el timeout de un usuario.
 ↳ *Estructura:* \`dex untimeout @usuario\`
-🔸 **dex mute** | Silencia a un usuario por rol. *(Razón opcional)*
-↳ *Estructura:* \`dex mute @usuario razón\`
-🔸 **dex unmute** | Quita el silencio por rol de un usuario.
-↳ *Estructura:* \`dex unmute @usuario\`
 🔸 **dex warn** | Añade una advertencia. *(Razón opcional)*
 ↳ *Estructura:* \`dex warn @usuario razón\`
+🔸 **dex unwarn** | Quita advertencias de un usuario.
+↳ *Estructura:* \`dex unwarn @usuario 1-3/all\`
 🔸 **dex warnings** | Muestra advertencias de un usuario.
 ↳ *Estructura:* \`dex warnings @usuario\`
 🔸 **dex lock** | Bloquea un canal.
