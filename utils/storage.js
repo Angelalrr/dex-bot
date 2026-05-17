@@ -2,7 +2,8 @@ const defaultData = {
     warningsDB: {},
     afkDB: {},
     timeoutsDB: {},
-    bansDB: {}
+    bansDB: {},
+    moderationSettingsDB: {}
 };
 
 const stateId = process.env.SUPABASE_STATE_ID || 'global';
@@ -35,7 +36,8 @@ function normalizeData(data = {}) {
         warningsDB: data.warningsDB || {},
         afkDB: data.afkDB || {},
         timeoutsDB: data.timeoutsDB || {},
-        bansDB: data.bansDB || {}
+        bansDB: data.bansDB || {},
+        moderationSettingsDB: data.moderationSettingsDB || {}
     };
 }
 
@@ -94,7 +96,8 @@ async function saveCurrentData() {
         warningsDB: global.warningsDB || {},
         afkDB: global.afkDB || {},
         timeoutsDB: global.timeoutsDB || {},
-        bansDB: global.bansDB || {}
+        bansDB: global.bansDB || {},
+        moderationSettingsDB: global.moderationSettingsDB || {}
     });
 }
 
@@ -128,10 +131,15 @@ async function removeBan(userId) {
     await saveCurrentData();
 }
 
+async function saveModerationSettingsDB() {
+    await saveCurrentData();
+}
+
 module.exports = {
     loadData,
     saveWarningsDB,
     saveAfkDB,
+    saveModerationSettingsDB,
     recordTimeout,
     removeTimeout,
     recordBan,
