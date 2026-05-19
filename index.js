@@ -31,6 +31,11 @@ async function startBot() {
     global.timeoutsDB = persistedData.timeoutsDB;
     global.bansDB = persistedData.bansDB;
     global.moderationSettingsDB = persistedData.moderationSettingsDB;
+    global.verificationSystemsDB = persistedData.verificationSystemsDB;
+    global.verifiedUsersDB = persistedData.verifiedUsersDB;
+    global.ticketSystemsDB = persistedData.ticketSystemsDB;
+    global.ticketCountersDB = persistedData.ticketCountersDB;
+    global.moderationActionsDB = persistedData.moderationActionsDB;
 
     // --- CARGADOR DE COMANDOS ---
     const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
