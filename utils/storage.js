@@ -3,7 +3,12 @@ const defaultData = {
     afkDB: {},
     timeoutsDB: {},
     bansDB: {},
-    moderationSettingsDB: {}
+    moderationSettingsDB: {},
+    verificationSystemsDB: {},
+    verifiedUsersDB: {},
+    ticketSystemsDB: {},
+    ticketCountersDB: {},
+    moderationActionsDB: {}
 };
 
 const stateId = process.env.SUPABASE_STATE_ID || 'global';
@@ -37,7 +42,12 @@ function normalizeData(data = {}) {
         afkDB: data.afkDB || {},
         timeoutsDB: data.timeoutsDB || {},
         bansDB: data.bansDB || {},
-        moderationSettingsDB: data.moderationSettingsDB || {}
+        moderationSettingsDB: data.moderationSettingsDB || {},
+        verificationSystemsDB: data.verificationSystemsDB || {},
+        verifiedUsersDB: data.verifiedUsersDB || {},
+        ticketSystemsDB: data.ticketSystemsDB || {},
+        ticketCountersDB: data.ticketCountersDB || {},
+        moderationActionsDB: data.moderationActionsDB || {}
     };
 }
 
@@ -97,17 +107,20 @@ async function saveCurrentData() {
         afkDB: global.afkDB || {},
         timeoutsDB: global.timeoutsDB || {},
         bansDB: global.bansDB || {},
-        moderationSettingsDB: global.moderationSettingsDB || {}
+        moderationSettingsDB: global.moderationSettingsDB || {},
+        verificationSystemsDB: global.verificationSystemsDB || {},
+        verifiedUsersDB: global.verifiedUsersDB || {},
+        ticketSystemsDB: global.ticketSystemsDB || {},
+        ticketCountersDB: global.ticketCountersDB || {},
+        moderationActionsDB: global.moderationActionsDB || {}
     });
 }
 
-async function saveWarningsDB() {
-    await saveCurrentData();
-}
-
-async function saveAfkDB() {
-    await saveCurrentData();
-}
+async function saveWarningsDB() { await saveCurrentData(); }
+async function saveAfkDB() { await saveCurrentData(); }
+async function saveModerationSettingsDB() { await saveCurrentData(); }
+async function saveVerificationDB() { await saveCurrentData(); }
+async function saveTicketDB() { await saveCurrentData(); }
 
 async function recordTimeout(userId, data) {
     if (!global.timeoutsDB) global.timeoutsDB = {};
@@ -131,7 +144,11 @@ async function removeBan(userId) {
     await saveCurrentData();
 }
 
-async function saveModerationSettingsDB() {
+async function recordModerationAction(guildId, type, userId, data) {
+    if (!global.moderationActionsDB) global.moderationActionsDB = {};
+    if (!global.moderationActionsDB[guildId]) global.moderationActionsDB[guildId] = {};
+    if (!global.moderationActionsDB[guildId][type]) global.moderationActionsDB[guildId][type] = {};
+    global.moderationActionsDB[guildId][type][userId] = data;
     await saveCurrentData();
 }
 
@@ -140,8 +157,11 @@ module.exports = {
     saveWarningsDB,
     saveAfkDB,
     saveModerationSettingsDB,
+    saveVerificationDB,
+    saveTicketDB,
     recordTimeout,
     removeTimeout,
     recordBan,
-    removeBan
+    removeBan,
+    recordModerationAction
 };
