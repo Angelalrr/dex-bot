@@ -19,4 +19,17 @@ function hasModRoleOrHigher(member) {
     return member.roles.highest.position >= modRole.position;
 }
 
-module.exports = { hasModRoleOrHigher };
+function getModRolesOrHigher(guild) {
+    const modRole = guild.roles.cache
+        .filter(role => ['mod', 'moderador', 'moderator'].includes(normalizeRoleName(role.name)))
+        .sort((a, b) => b.position - a.position)
+        .first();
+
+    if (!modRole) {
+        return guild.roles.cache.filter(role => role.permissions.has('Administrator') || role.permissions.has('ModerateMembers'));
+    }
+
+    return guild.roles.cache.filter(role => role.position >= modRole.position);
+}
+
+module.exports = { getModRolesOrHigher, hasModRoleOrHigher };
